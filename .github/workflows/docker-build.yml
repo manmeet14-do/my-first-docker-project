@@ -20,6 +20,8 @@ jobs:
    steps:
       - name: create docker image
         run: docker build -t my-python-app .
+        with:
+          path: Dockerfile
 
   test:
    needs: deploy
