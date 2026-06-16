@@ -17,9 +17,18 @@ jobs:
    needs: build
    runs-on: ubuntu-latest
 
+
+
    steps:
+      - name: checkout Code repo
+        uses: actions/checkout@v4
+
+ 
       - name: create docker image
         run: docker build -t my-python-app -f Dockerfile .
+
+
+      
 
   test:
    needs: deploy
