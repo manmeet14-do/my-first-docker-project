@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: Docker CI pipline
 
 
@@ -18,8 +19,32 @@ jobs:
 
      - name: upload artifacts
        uses: actions/upload-artifact@v4
+=======
+name: Docker CI Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repo
+        uses: actions/checkout@v4
+>>>>>>> ae3ea2d4f855e8ec78517dfba0b763c02a16a06c
+
+      - name: Verify Files
+        run: ls -la
+
+      - name: Upload Project Files
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-files
+          path: .
 
   deploy:
+<<<<<<< HEAD
    needs: build
     runs-on: ubuntu-latest
 
@@ -32,8 +57,18 @@ jobs:
 
       - name: Build Docker images
         uses: docker build -t my-python-app .
+=======
+    needs: build
+    runs-on: ubuntu-latest
+>>>>>>> ae3ea2d4f855e8ec78517dfba0b763c02a16a06c
 
+    steps:
+      - name: Download Project Files
+        uses: actions/download-artifact@v4
+        with:
+          name: project-files
 
+<<<<<<< HEAD
       - name: save docker image
         run: docker save my-python-app -o my-python-app.tar
 
@@ -67,3 +102,36 @@ jobs:
          run: docker run --rm my-python-app
      
      
+=======
+      - name: Build Docker Image
+        run: docker build -t my-python-app .
+
+      - name: Save Docker Image
+        run: docker save my-python-app -o my-python-app.tar
+
+      - name: Upload Docker Image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: my-python-app.tar
+
+  test:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: Download Docker Image
+       uses: actions/download-artifact@v4
+       with:
+         name: docker-image
+
+     - name: Load Docker Image
+       run: docker load -i my-python-app.tar
+
+     - name: Verify Docker Image
+       run: docker images
+
+     - name: Run Docker Container
+       run: docker run --rm my-python-app
+
+>>>>>>> ae3ea2d4f855e8ec78517dfba0b763c02a16a06c
